@@ -13,31 +13,20 @@
     </UserControl.DataContext>
 
     <StackPanel Margin="20" Spacing="10">
-        <TextBlock Text="Download History" FontSize="18" FontWeight="Bold" />
-        
+        <TextBlock Text="Download History" FontSize="20" FontWeight="Bold" Foreground="White" />
+
+        <Button Content="Clear History" Command="{Binding ClearHistoryCommand}" HorizontalAlignment="Right" Width="120" Margin="0,0,0,10" />
+
         <ListBox ItemsSource="{Binding HistoryItems}">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="models:HistoryItem">
-                    <Border Background="LightBlue" Padding="10" Margin="5" CornerRadius="5">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            
-                            <StackPanel Grid.Column="0" Spacing="5">
-                                <TextBlock Text="{Binding Title}" FontWeight="Bold" />
-                                <TextBlock Text="{Binding Format}" />
-                                <TextBlock Text="{Binding DownloadDate, StringFormat='Downloaded: {0:yyyy-MM-dd HH:mm}'}" />
-                                <TextBlock Text="{Binding FilePath}" FontSize="10" Foreground="Gray" />
-                            </StackPanel>
-                            
-                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="5">
-                                <Button Content="Open Folder" Command="{Binding $parent[UserControl].((vm:HistoryViewModel)DataContext).OpenFolderCommand}" CommandParameter="{Binding}" />
-                                <Button Content="Play" Command="{Binding $parent[UserControl].((vm:HistoryViewModel)DataContext).PlayFileCommand}" CommandParameter="{Binding}" />
-                                <Button Content="Remove" Command="{Binding $parent[UserControl].((vm:HistoryViewModel)DataContext).RemoveCommand}" CommandParameter="{Binding}" />
-                            </StackPanel>
-                        </Grid>
+                    <Border Classes="card">
+                        <StackPanel Spacing="5">
+                            <TextBlock Text="{Binding Title}" FontWeight="Bold" Foreground="White" />
+                            <TextBlock Text="{Binding Format}" Foreground="#ccc" />
+                            <TextBlock Text="{Binding DownloadDate, StringFormat='Downloaded: {0:yyyy-MM-dd HH:mm}'}" Foreground="#aaa" />
+                            <TextBlock Text="{Binding FilePath}" Foreground="#888" FontSize="10" TextWrapping="Wrap" />
+                        </StackPanel>
                     </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>

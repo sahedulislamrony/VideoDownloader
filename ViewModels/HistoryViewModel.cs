@@ -1,64 +1,33 @@
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using VideoDownloaderApp.Models;
-using VideoDownloaderApp.Services;
+
+using VideoDownloaderApp.ViewModels;
 
 namespace VideoDownloaderApp.ViewModels
 {
-    public class HistoryViewModel : ObservableObject
+    public class HistoryViewModel : ViewModelBase
     {
-        private readonly FileService _fileService;
-
         public ObservableCollection<HistoryItem> HistoryItems { get; } = new();
+
+        public ICommand ClearHistoryCommand { get; }
 
         public HistoryViewModel()
         {
-            // Note: FileService needs a Window reference, this will be injected properly later
-            _fileService = new FileService(null!);
-            
-            OpenFolderCommand = new RelayCommand<HistoryItem>(OpenFolder);
-            PlayFileCommand = new RelayCommand<HistoryItem>(PlayFile);
-            RemoveCommand = new RelayCommand<HistoryItem>(RemoveItem);
+            // TODO: Load history from service or database
+            // For now, add sample data
+            HistoryItems.Add(new HistoryItem { Title = "Sample Video 1", Format = "MP4 720p", DownloadDate = System.DateTime.Now.AddDays(-1), FilePath = "C:\\Downloads\\video1.mp4" });
+            HistoryItems.Add(new HistoryItem { Title = "Sample Video 2", Format = "MP3 Audio", DownloadDate = System.DateTime.Now.AddDays(-2), FilePath = "C:\\Downloads\\audio1.mp3" });
+
+            ClearHistoryCommand = new RelayCommand(ClearHistory);
         }
 
-        public ICommand OpenFolderCommand { get; }
-        public ICommand PlayFileCommand { get; }
-        public ICommand RemoveCommand { get; }
-
-        private void OpenFolder(HistoryItem? item)
+        private void ClearHistory()
         {
-            if (item != null && File.Exists(item.FilePath))
-            {
-                var directory = Path.GetDirectoryName(item.FilePath);
-                if (directory != null)
-                {
-                    _fileService.OpenFolder(directory);
-                }
-            }
-        }
-
-        private void PlayFile(HistoryItem? item)
-        {
-            if (item != null && File.Exists(item.FilePath))
-            {
-                _fileService.PlayFile(item.FilePath);
-            }
-        }
-
-        private void RemoveItem(HistoryItem? item)
-        {
-            if (item != null)
-            {
-                HistoryItems.Remove(item);
-            }
-        }
-
-        public void AddHistoryItem(HistoryItem item)
-        {
-            HistoryItems.Insert(0, item); // Add to top of list
+            HistoryItems.Clear();
+            // TODO: Also clear from persistent storage
         }
     }
 }

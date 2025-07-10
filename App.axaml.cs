@@ -1,3 +1,5 @@
+
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
@@ -16,17 +18,35 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    public override void OnFrameworkInitializationCompleted()
+    public override async void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-            // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            desktop.MainWindow = new MainWindow
+
+            var splash = new Views.SplashWindow();
+            splash.Show();
+
+            // Simulate loading delay (e.g., 3 seconds)
+            await System.Threading.Tasks.Task.Delay(1000);
+
+            try
             {
-                DataContext = new MainWindowViewModel(),
-            };
+                var mainWindow = new MainWindow
+                {
+                    DataContext = new MainWindowViewModel(),
+                };
+
+                desktop.MainWindow = mainWindow;
+                mainWindow.Show();
+                splash.Close();
+            }
+            catch (Exception ex)
+            {
+                splash.Close();
+                System.Console.WriteLine("Exception during main window initialization: " + ex);
+                throw;
+            }
         }
 
         base.OnFrameworkInitializationCompleted();

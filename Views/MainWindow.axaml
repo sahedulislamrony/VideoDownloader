@@ -1,29 +1,160 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:VideoDownloaderApp.ViewModels"
         xmlns:views="clr-namespace:VideoDownloaderApp.Views"
-        mc:Ignorable="d"
         x:Class="VideoDownloaderApp.Views.MainWindow"
         Title="Video Downloader"
-        Width="800" Height="600">
+        Width="1200" Height="800"
+        MinWidth="1000" MinHeight="700"
+        x:DataType="vm:MainWindowViewModel">
 
     <Window.DataContext>
-        <vm:MainViewModel/>
+        <vm:MainWindowViewModel/>
     </Window.DataContext>
 
+    <Window.Styles>
+        <Style Selector="Border.sidebar">
+            <Setter Property="Background" Value="#121212"/>
+            <Setter Property="BorderThickness" Value="0 0 1 0"/>
+            <Setter Property="BorderBrush" Value="#252525"/>
+        </Style>
+        
+        <Style Selector="ToggleButton.nav-button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="16 12"/>
+            <Setter Property="Margin" Value="16 4 16 4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Foreground" Value="#b0b0b0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Width" Value="248"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="FocusAdorner" Value="{x:Null}"/> <!-- Removes focus border -->
+        </Style>
+        
+        <Style Selector="ToggleButton.nav-button:pointerover">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+        </Style>
+        
+        <Style Selector="ToggleButton.nav-button:checked">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+        </Style>
+        
+        <Style Selector="Border.content-area">
+            <Setter Property="Background" Value="#0a0a0a"/>
+            <Setter Property="Padding" Value="24"/>
+        </Style>
+        
+        <Style Selector="Border.logo-container">
+            <Setter Property="Margin" Value="16"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Background" Value="#141414f8"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="248"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="16" Color="#000000" Opacity="0.2" OffsetX="0" OffsetY="0"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style Selector="TextBlock.logo-text">
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        
+        <Style Selector="TextBlock.version-text">
+            <Setter Property="Foreground" Value="#707070"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0 16 0 12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        
+        <Style Selector="Border.separator">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Height" Value="1"/>
+            <Setter Property="Margin" Value="16 8 16 8"/>
+        </Style>
+        
+        <Style Selector="ToggleButton:focus-visible /template/ ContentPresenter">
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+    </Window.Styles>
+
     <Grid>
-        <TabControl>
-            <TabItem Header="Paste Link">
-                <views:PasteLinkView />
-            </TabItem>
-            <TabItem Header="Downloads">
-                <views:DownloadsView />
-            </TabItem>
-            <TabItem Header="History">
-                <views:HistoryView />
-            </TabItem>
-        </TabControl>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar with glass effect logo -->
+        <Border Grid.Column="0" Classes="sidebar">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <!-- Centered Glass Effect Logo Section -->
+                <Border Classes="logo-container" Grid.Row="0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Border Width="36" Height="36" CornerRadius="18" Margin="0,0,12,0" ClipToBounds="True">
+                            <Image Source="/Resources/logo.png" Width="36" Height="36"/>
+                        </Border>
+                        <TextBlock Classes="logo-text" Text="Video Downloader" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Navigation Buttons -->
+                <StackPanel Grid.Row="1" Margin="0 8 0 0">
+                    <ToggleButton Classes="nav-button" Command="{Binding NavigationService.NavigateHomeCommand}" 
+                                 IsChecked="{Binding NavigationService.CurrentPage, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Home}">
+                        <TextBlock Text="Home" VerticalAlignment="Center"/>
+                    </ToggleButton>
+                    
+                    <ToggleButton Classes="nav-button" Command="{Binding NavigationService.NavigateDownloadsCommand}" 
+                                 IsChecked="{Binding NavigationService.CurrentPage, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Downloads}">
+                        <TextBlock Text="Downloads" VerticalAlignment="Center"/>
+                    </ToggleButton>
+                    
+                    <ToggleButton Classes="nav-button" Command="{Binding NavigationService.NavigateHistoryCommand}" 
+                                 IsChecked="{Binding NavigationService.CurrentPage, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=History}">
+                        <TextBlock Text="History" VerticalAlignment="Center"/>
+                    </ToggleButton>
+                    
+                    <!-- Separator -->
+                    <Border Classes="separator"/>
+                    
+                    <ToggleButton Classes="nav-button" Command="{Binding NavigationService.NavigateSettingsCommand}" 
+                                 IsChecked="{Binding NavigationService.CurrentPage, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Settings}">
+                        <TextBlock Text="Settings" VerticalAlignment="Center"/>
+                    </ToggleButton>
+                    
+                    <ToggleButton Classes="nav-button" Command="{Binding NavigationService.NavigateSupportCommand}" 
+                                 IsChecked="{Binding NavigationService.CurrentPage, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Support}">
+                        <TextBlock Text="Help &amp; Support" VerticalAlignment="Center"/>
+                    </ToggleButton>
+                </StackPanel>
+                
+                <!-- Version Info -->
+                <StackPanel Grid.Row="2">
+                    <TextBlock Classes="version-text" Text="v1.0.0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Content Area -->
+        <Border Grid.Column="1" Classes="content-area">
+            <ContentControl Content="{Binding CurrentView}"/>
+        </Border>
     </Grid>
 </Window>

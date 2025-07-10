@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:VideoDownloaderApp.ViewModels"
+             mc:Ignorable="d"
+             x:Class="VideoDownloaderApp.Views.HomeView"
+             x:DataType="vm:HomeViewModel">
+
+    <UserControl.DataContext>
+        <vm:HomeViewModel/>
+    </UserControl.DataContext>
+
+    <StackPanel Margin="20" Spacing="15" HorizontalAlignment="Center" VerticalAlignment="Center" Width="600">
+        <TextBlock Text="Paste Video URL" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" />
+        <TextBox Watermark="Paste YouTube URL here..." Text="{Binding VideoUrl, Mode=TwoWay}" Classes="modern" AcceptsReturn="True" Height="100" />
+        
+        <StackPanel Orientation="Horizontal" Spacing="20" HorizontalAlignment="Center">
+            <RadioButton Content="Single Video" IsChecked="{Binding IsSingleVideo}" />
+            <RadioButton Content="Playlist (soon)" IsChecked="{Binding IsPlaylist}" IsEnabled="False" />
+            <RadioButton Content="Channel (soon)" IsChecked="{Binding IsChannel}" IsEnabled="False" />
+        </StackPanel>
+
+        <Button Content="Fetch Video Info" Command="{Binding FetchVideoInfoCommand}" Classes="primary" HorizontalAlignment="Center" Width="200" />
+
+        <!-- Video Info Section -->
+        <Border Classes="card" Margin="20,30,20,0" Padding="15" IsVisible="{Binding IsVideoInfoVisible}">
+            <StackPanel Orientation="Horizontal" Spacing="15">
+                <Image Source="{Binding VideoInfo.ThumbnailUrl}" Width="160" Height="90" />
+                <StackPanel>
+                    <TextBlock Text="{Binding VideoInfo.Title}" FontWeight="Bold" FontSize="16" Foreground="White" TextWrapping="Wrap" Width="400" />
+                    <TextBlock Text="{Binding VideoInfo.Description}" FontSize="12" Foreground="#ccc" TextWrapping="Wrap" Width="400" MaxHeight="90" />
+                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
+                        <Button Content="Download Video" Command="{Binding DownloadVideoCommand}" Classes="primary" />
+                        <Button Content="Download Audio" Command="{Binding DownloadAudioCommand}" Classes="secondary" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>
