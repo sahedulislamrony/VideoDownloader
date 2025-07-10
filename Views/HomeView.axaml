@@ -11,31 +11,158 @@
         <vm:HomeViewModel/>
     </UserControl.DataContext>
 
-    <StackPanel Margin="20" Spacing="15" HorizontalAlignment="Center" VerticalAlignment="Center" Width="600">
-        <TextBlock Text="Paste Video URL" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" />
-        <TextBox Watermark="Paste YouTube URL here..." Text="{Binding VideoUrl, Mode=TwoWay}" Classes="modern" AcceptsReturn="True" Height="100" />
+    <UserControl.Styles>
+        <Style Selector="TextBox.modern">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="CaretBrush" Value="#4CAF50"/>
+        </Style>
         
-        <StackPanel Orientation="Horizontal" Spacing="20" HorizontalAlignment="Center">
-            <RadioButton Content="Single Video" IsChecked="{Binding IsSingleVideo}" />
-            <RadioButton Content="Playlist (soon)" IsChecked="{Binding IsPlaylist}" IsEnabled="False" />
-            <RadioButton Content="Channel (soon)" IsChecked="{Binding IsChannel}" IsEnabled="False" />
-        </StackPanel>
+        <Style Selector="TextBox.modern:focus-within">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#4CAF50"/>
+        </Style>
+        
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="12 8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="MinWidth" Value="120"/>
+        </Style>
+        
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#45a049"/>
+        </Style>
+        
+        <Style Selector="Button.secondary">
+            <Setter Property="Background" Value="#2d2d2d"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#4CAF50"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="12 8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="MinWidth" Value="120"/>
+        </Style>
+        
+        <Style Selector="Button.secondary:pointerover">
+            <Setter Property="Background" Value="#3a3a3a"/>
+        </Style>
+        
+        <Style Selector="RadioButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="8 4"/>
+        </Style>
+        
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#353535"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="16" Color="#000000" Opacity="0.2" OffsetX="0" OffsetY="4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style Selector="Border.rounded-image">
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="ClipToBounds" Value="True"/>
+        </Style>
+    </UserControl.Styles>
 
-        <Button Content="Fetch Video Info" Command="{Binding FetchVideoInfoCommand}" Classes="primary" HorizontalAlignment="Center" Width="200" />
-
-        <!-- Video Info Section -->
-        <Border Classes="card" Margin="20,30,20,0" Padding="15" IsVisible="{Binding IsVideoInfoVisible}">
-            <StackPanel Orientation="Horizontal" Spacing="15">
-                <Image Source="{Binding VideoInfo.ThumbnailUrl}" Width="160" Height="90" />
-                <StackPanel>
-                    <TextBlock Text="{Binding VideoInfo.Title}" FontWeight="Bold" FontSize="16" Foreground="White" TextWrapping="Wrap" Width="400" />
-                    <TextBlock Text="{Binding VideoInfo.Description}" FontSize="12" Foreground="#ccc" TextWrapping="Wrap" Width="400" MaxHeight="90" />
-                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
-                        <Button Content="Download Video" Command="{Binding DownloadVideoCommand}" Classes="primary" />
-                        <Button Content="Download Audio" Command="{Binding DownloadAudioCommand}" Classes="secondary" />
-                    </StackPanel>
-                </StackPanel>
+    <Grid Margin="20" VerticalAlignment="Center">
+        <StackPanel Spacing="20" HorizontalAlignment="Center" Width="700">
+            <!-- Header -->
+            <StackPanel Spacing="8" HorizontalAlignment="Center">
+                <TextBlock Text="Video Downloader" FontSize="24" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                <TextBlock Text="Paste any video URL to download" FontSize="14" Foreground="#a0a0a0" HorizontalAlignment="Center"/>
             </StackPanel>
-        </Border>
-    </StackPanel>
+            
+            <!-- URL Input -->
+            <TextBox Watermark="https://www.youtube.com/watch?v=..." 
+                   Text="{Binding VideoUrl, Mode=TwoWay}" 
+                   Classes="modern" 
+                   Height="50"
+                   FontSize="14"/>
+            
+            <!-- Content Type Selector -->
+            <StackPanel Orientation="Horizontal" Spacing="15" HorizontalAlignment="Center">
+                <RadioButton Content="Single Video" IsChecked="{Binding IsSingleVideo}" GroupName="ContentType"/>
+                <RadioButton Content="Playlist" IsChecked="{Binding IsPlaylist}" GroupName="ContentType" IsEnabled="False"/>
+                <RadioButton Content="Channel" IsChecked="{Binding IsChannel}" GroupName="ContentType" IsEnabled="False"/>
+            </StackPanel>
+            
+            <!-- Action Button -->
+            <Button Content="Fetch Video Info" 
+                   Command="{Binding FetchVideoInfoCommand}" 
+                   Classes="primary" 
+                   HorizontalAlignment="Center" 
+                   Width="200"
+                   Margin="0,10"/>
+            
+            <!-- Video Info Card -->
+            <Border Classes="card" 
+                   Padding="20" 
+                   IsVisible="{Binding IsVideoInfoVisible}"
+                   Margin="0,20">
+                <Grid ColumnDefinitions="160,*" RowDefinitions="Auto,Auto">
+                    <!-- Thumbnail with rounded corners -->
+                    <Border Classes="rounded-image" 
+                           Grid.Column="0" 
+                           Grid.RowSpan="2"
+                           Width="160" 
+                           Height="90"
+                           Margin="0,0,20,0">
+                        <Image Source="{Binding VideoInfo.ThumbnailUrl}"/>
+                    </Border>
+                    
+                    <!-- Title -->
+                    <TextBlock Grid.Column="1" Grid.Row="0"
+                              Text="{Binding VideoInfo.Title}" 
+                              FontWeight="Bold" 
+                              FontSize="16" 
+                              Foreground="White" 
+                              TextWrapping="Wrap"
+                              Margin="0,0,0,8"/>
+                    
+                    <!-- Description -->
+                    <ScrollViewer Grid.Column="1" Grid.Row="1"
+                                 MaxHeight="60"
+                                 VerticalScrollBarVisibility="Auto">
+                        <TextBlock Text="{Binding VideoInfo.Description}" 
+                                  FontSize="12" 
+                                  Foreground="#b0b0b0" 
+                                  TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                    
+                    <!-- Action Buttons -->
+                    <StackPanel Grid.Column="1" Grid.Row="1"
+                               Orientation="Horizontal" 
+                               Spacing="15" 
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Bottom"
+                               Margin="0,15,0,0">
+                        <Button Content="Download Video" 
+                               Command="{Binding DownloadVideoCommand}" 
+                               Classes="primary"
+                               MinWidth="140"/>
+                        <Button Content="Download Audio" 
+                               Command="{Binding DownloadAudioCommand}" 
+                               Classes="secondary"
+                               MinWidth="140"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </Grid>
 </UserControl>

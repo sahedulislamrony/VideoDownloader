@@ -11,20 +11,87 @@
         <vm:SettingsViewModel/>
     </UserControl.DataContext>
 
-    <StackPanel Margin="20" Spacing="15" Width="600">
-        <TextBlock Text="Settings" FontSize="20" FontWeight="Bold" Foreground="White" />
+    <UserControl.Styles>
+        <Style Selector="TextBlock.setting-label">
+            <Setter Property="Foreground" Value="#E0E0E0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0 0 0 5"/>
+        </Style>
 
-        <StackPanel Spacing="10">
-            <TextBlock Text="yt-dlp Path:" Foreground="White" />
-            <TextBox Text="{Binding YtDlpPath, Mode=TwoWay}" Classes="modern" />
+        <Style Selector="TextBox.setting-input">
+            <Setter Property="Background" Value="#2D2D2D"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#404040"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
 
-            <TextBlock Text="ffmpeg Path:" Foreground="White" />
-            <TextBox Text="{Binding FfmpegPath, Mode=TwoWay}" Classes="modern" />
+        <Style Selector="TextBox.setting-input:focus">
+            <Setter Property="BorderBrush" Value="#4CAF50"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+        </Style>
 
-            <TextBlock Text="Default Download Path:" Foreground="White" />
-            <TextBox Text="{Binding DefaultDownloadPath, Mode=TwoWay}" Classes="modern" />
+        <Style Selector="Button.save-button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="14 10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="MinWidth" Value="150"/>
+        </Style>
 
-            <Button Content="Save Settings" Command="{Binding SaveSettingsCommand}" Classes="primary" HorizontalAlignment="Left" Width="150" Margin="0,20,0,0" />
+        <Style Selector="Button.save-button:pointerover">
+            <Setter Property="Background" Value="#45a049"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="30" Spacing="20" MaxWidth="800">
+            <!-- Header -->
+            <TextBlock Text="Application Settings" 
+                      FontSize="24" 
+                      FontWeight="Bold" 
+                      Foreground="White" />
+
+            <!-- Settings Card -->
+            <Border Background="#0F0F0F9f" CornerRadius="12" Padding="25">
+                <StackPanel Spacing="20">
+                    <!-- yt-dlp Path -->
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="yt-dlp Executable Path" 
+                                  Classes="setting-label"/>
+                        <TextBox Text="{Binding YtDlpPath, Mode=TwoWay}" 
+                                Classes="setting-input"/>
+                    </StackPanel>
+
+                    <!-- ffmpeg Path -->
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="FFmpeg Executable Path" 
+                                  Classes="setting-label"/>
+                        <TextBox Text="{Binding FfmpegPath, Mode=TwoWay}" 
+                                Classes="setting-input"/>
+                    </StackPanel>
+
+                    <!-- Download Path -->
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="Default Download Location" 
+                                  Classes="setting-label"/>
+                        <TextBox Text="{Binding DefaultDownloadPath, Mode=TwoWay}" 
+                                Classes="setting-input"/>
+                    </StackPanel>
+
+                    <!-- Save Button -->
+                    <Button Content="Save Settings" 
+                           Command="{Binding SaveSettingsCommand}" 
+                           Classes="save-button" 
+                           HorizontalAlignment="Right"
+                           Margin="0 20 0 0"/>
+                </StackPanel>
+            </Border>
         </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </UserControl>

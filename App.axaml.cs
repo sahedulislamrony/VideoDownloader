@@ -28,7 +28,7 @@ public partial class App : Application
             splash.Show();
 
             // Simulate loading delay (e.g., 3 seconds)
-            await System.Threading.Tasks.Task.Delay(1000);
+            await System.Threading.Tasks.Task.Delay(000);
 
             try
             {

@@ -11,11 +11,90 @@
         <vm:SupportViewModel/>
     </UserControl.DataContext>
 
-    <StackPanel Margin="20" Spacing="15" Width="600">
-        <TextBlock Text="Support &amp; About" FontSize="20" FontWeight="Bold" Foreground="White" />
+    <StackPanel Background="Transparent" Margin="20" Spacing="15">
+        <!-- Header -->
+        <TextBlock Text="Support &amp; About" 
+                  FontSize="24" 
+                  FontWeight="Bold" 
+                  Foreground="White" />
 
-        <TextBlock Text="This application was developed by the VideoDownloaderApp Team." Foreground="White" TextWrapping="Wrap" Margin="0,10,0,0" />
-        <TextBlock Text="For support, please contact support@videodownloaderapp.com." Foreground="White" TextWrapping="Wrap" Margin="0,5,0,0" />
-        <TextBlock Text="Version: 1.0.0" Foreground="White" Margin="0,20,0,0" />
+        <!-- App Information -->
+        <Border Background="Transparent" CornerRadius="8" Padding="15" Margin="0,10">
+            <StackPanel Spacing="8">
+                <TextBlock Text="Video Downloader App" 
+                          FontSize="18" 
+                          FontWeight="SemiBold" 
+                          Foreground="White"/>
+                <TextBlock Text="Version: 1.0.0" 
+                          Foreground="#b0b0b0"/>
+                <TextBlock Text="A modern application for downloading videos" 
+                          Foreground="#b0b0b0" 
+                          TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Developer Information -->
+        <Border Background="Transparent" CornerRadius="8" Padding="15" Margin="0,10">
+            <StackPanel Spacing="10">
+                <TextBlock Text="Developer" 
+                          FontSize="18" 
+                          FontWeight="SemiBold" 
+                          Foreground="White"/>
+                
+                <StackPanel Orientation="Horizontal" Spacing="15">
+                    <!-- Placeholder for developer image -->
+                    <Border Width="60" Height="60" CornerRadius="30" 
+                            Background="#333333" VerticalAlignment="Top">
+                        <TextBlock Text="SI" 
+                                  FontSize="20"
+                                  Foreground="White"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"/>
+                    </Border>
+                    
+                    <StackPanel>
+                        <TextBlock Text="Sahedul Islam" 
+                                  FontSize="16" 
+                                  Foreground="White"/>
+                        <TextBlock Text="Software Engineer" 
+                                  FontSize="14" 
+                                  Foreground="#b0b0b0"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Contact Information -->
+        <Border Background="Transparent" CornerRadius="8" Padding="15" Margin="0,10">
+            <StackPanel Spacing="10">
+                <TextBlock Text="Contact" 
+                          FontSize="18" 
+                          FontWeight="SemiBold" 
+                          Foreground="White"/>
+                
+                <StackPanel Margin="10,5">
+                    <TextBlock Text="Email: sahedul.dev@gmail.com" 
+                              Foreground="White"/>
+                    <TextBlock Text="GitHub: github.com/sahedulislamrony" 
+                              Foreground="White" Margin="0,5"/>
+                    <TextBlock Text="LinkedIn: linkedin.com/in/sahedulislamrony" 
+                              Foreground="White"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Support Information -->
+        <Border Background="Transparent" CornerRadius="8" Padding="15" Margin="0,10">
+            <StackPanel Spacing="8">
+                <TextBlock Text="Support" 
+                          FontSize="18" 
+                          FontWeight="SemiBold" 
+                          Foreground="White"/>
+                <TextBlock Text="For support, please contact:" 
+                          Foreground="#b0b0b0"/>
+                <TextBlock Text="support@videodownloaderapp.com" 
+                          Foreground="White" Margin="0,5"/>
+            </StackPanel>
+        </Border>
     </StackPanel>
 </UserControl>
