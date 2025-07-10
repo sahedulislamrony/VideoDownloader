@@ -1,0 +1,29 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:VideoDownloaderApp.ViewModels"
+        xmlns:views="clr-namespace:VideoDownloaderApp.Views"
+        mc:Ignorable="d"
+        x:Class="VideoDownloaderApp.Views.MainWindow"
+        Title="Video Downloader"
+        Width="800" Height="600">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <TabControl>
+            <TabItem Header="Paste Link">
+                <views:PasteLinkView />
+            </TabItem>
+            <TabItem Header="Downloads">
+                <views:DownloadsView />
+            </TabItem>
+            <TabItem Header="History">
+                <views:HistoryView />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

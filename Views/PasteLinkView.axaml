@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:VideoDownloaderApp.ViewModels"
+             mc:Ignorable="d"
+             x:Class="VideoDownloaderApp.Views.PasteLinkView"
+             x:DataType="vm:PasteLinkViewModel">
+
+    <UserControl.DataContext>
+        <vm:PasteLinkViewModel/>
+    </UserControl.DataContext>
+
+    <StackPanel Margin="20" Spacing="10">
+        <TextBox Watermark="Paste video URL here" Text="{Binding VideoUrl, Mode=TwoWay}" />
+        <Button Content="Fetch Formats" Command="{Binding FetchFormatsCommand}" />
+        <!-- Format selection UI will be added here later -->
+    </StackPanel>
+</UserControl>

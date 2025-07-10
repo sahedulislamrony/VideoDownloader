@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Product Id="*" 
+           Name="VideoDownloaderApp" 
+           Language="1033" 
+           Version="1.0.0.0" 
+           Manufacturer="VideoDownloaderApp Team"
+           UpgradeCode="12345678-1234-1234-1234-123456789012">
+    
+    <Package InstallerVersion="200" 
+             Compressed="yes" 
+             InstallScope="perMachine"
+             Description="Cross-platform video downloader application" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version is already installed." />
+    
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- Custom Actions for Dependencies -->
+    <Binary Id="DependencyInstaller" SourceFile="DependencyInstaller.exe" />
+    
+    <CustomAction Id="InstallDotNet" 
+                  BinaryKey="DependencyInstaller" 
+                  ExeCommand="install-dotnet"
+                  Execute="deferred"
+                  Impersonate="no" />
+    
+    <CustomAction Id="InstallYtDlp" 
+                  BinaryKey="DependencyInstaller" 
+                  ExeCommand="install-ytdlp"
+                  Execute="deferred"
+                  Impersonate="no" />
+    
+    <CustomAction Id="InstallFFmpeg" 
+                  BinaryKey="DependencyInstaller" 
+                  ExeCommand="install-ffmpeg"
+                  Execute="deferred"
+                  Impersonate="no" />
+
+    <!-- Installation Sequence -->
+    <InstallExecuteSequence>
+      <Custom Action="InstallDotNet" Before="InstallFiles">NOT Installed</Custom>
+      <Custom Action="InstallYtDlp" After="InstallDotNet">NOT Installed</Custom>
+      <Custom Action="InstallFFmpeg" After="InstallYtDlp">NOT Installed</Custom>
+    </InstallExecuteSequence>
+
+    <!-- Feature Definition -->
+    <Feature Id="ProductFeature" Title="VideoDownloaderApp" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+  </Product>
+
+  <!-- Directory Structure -->
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="INSTALLFOLDER" Name="VideoDownloaderApp" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="VideoDownloaderApp" />
+      </Directory>
+      <Directory Id="DesktopFolder" Name="Desktop" />
+    </Directory>
+  </Fragment>
+
+  <!-- Components -->
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <!-- Main Application -->
+      <Component Id="MainExecutable" Guid="*">
+        <File Id="VideoDownloaderAppExe" 
+              Source="$(var.PublishDir)\VideoDownloaderApp.exe" 
+              KeyPath="yes" />
+      </Component>
+      
+      <!-- Application Dependencies -->
+      <Component Id="ApplicationDependencies" Guid="*">
+        <File Id="AvaloniaBase" Source="$(var.PublishDir)\Avalonia.Base.dll" />
+        <File Id="AvaloniaControls" Source="$(var.PublishDir)\Avalonia.Controls.dll" />
+        <File Id="CommunityToolkitMvvm" Source="$(var.PublishDir)\CommunityToolkit.Mvvm.dll" />
+        <!-- Add other required DLLs -->
+      </Component>
+
+      <!-- Start Menu Shortcut -->
+      <Component Id="ApplicationShortcut" Directory="ApplicationProgramsFolder" Guid="*">
+        <Shortcut Id="ApplicationStartMenuShortcut"
+                  Name="VideoDownloaderApp"
+                  Description="Cross-platform video downloader"
+                  Target="[#VideoDownloaderAppExe]"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" 
+                       Key="Software\VideoDownloaderApp" 
+                       Name="installed" 
+                       Type="integer" 
+                       Value="1" 
+                       KeyPath="yes" />
+      </Component>
+
+      <!-- Desktop Shortcut -->
+      <Component Id="DesktopShortcut" Directory="DesktopFolder" Guid="*">
+        <Shortcut Id="ApplicationDesktopShortcut"
+                  Name="VideoDownloaderApp"
+                  Description="Cross-platform video downloader"
+                  Target="[#VideoDownloaderAppExe]"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" 
+                       Key="Software\VideoDownloaderApp" 
+                       Name="desktop" 
+                       Type="integer" 
+                       Value="1" 
+                       KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
